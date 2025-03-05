@@ -1,11 +1,11 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
 import Cards from "../cards/page";
 import TableView from "../table/page";
 import AddTicket from "../addTicket/page";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 export default function Dashboard () {
     const [tickets, setTickets] = useState([]);
