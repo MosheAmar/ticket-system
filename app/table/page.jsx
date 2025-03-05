@@ -1,13 +1,4 @@
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
+import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 export default function TableView ({tickets}) {
     return (
@@ -20,7 +11,7 @@ export default function TableView ({tickets}) {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {tickets.map((ticket) => (
+                {tickets?.map((ticket) => (
                 <TableRow key={ticket.title}>
                     <TableCell className="font-medium">{ticket.title}</TableCell>
                     <TableCell>{ticket.description}</TableCell>
