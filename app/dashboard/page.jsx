@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import { useEffect, useState } from "react";
 import Cards from "../cards/page";
 import TableView from "../table/page";
@@ -27,12 +26,7 @@ export default function Dashboard () {
             <div>
                 {isCardDisplay ? <Cards tickets={tickets}/> : <TableView tickets={tickets}/>}
             </div>
-            <Dialog>
-                <DialogTrigger asChild>
-                    <Button>Create Ticket</Button>
-                </DialogTrigger>
-                <AddTicket tickets={tickets} setTickets={setTickets}/>
-            </Dialog>
+            <AddTicket tickets={tickets} setTickets={setTickets}/>
         </main>
     );
 }
