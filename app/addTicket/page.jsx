@@ -1,9 +1,8 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { DialogHeader, DialogClose, DialogContent, DialogTitle } from "@/components/ui/dialog"
+import { DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useState } from "react"
-
 
 export default function AddTicket ({tickets, setTickets}) {
     const [title, setTitle] = useState('')
