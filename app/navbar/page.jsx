@@ -1,29 +1,35 @@
 import { Button } from "@/components/ui/button";
-import { 
-    LoginLink, 
-    LogoutLink, 
-    RegisterLink,
-  } from "@kinde-oss/kinde-auth-nextjs/components";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function Navbar () {
-    const {isAuthenticated} = getKindeServerSession();
-    const isAuthed = await isAuthenticated();
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
     return (
        <nav className="flex justify-between items-center py-2 px-4">
         <h1 className="font-bold text-2xl">Ticket System</h1>
-        {isAuthed ? (
-            <LogoutLink>
+        {session ? (
+            <div onClick={async ()=>{
+                'use server'
+                await auth.api.signOut({
+                    headers: await headers()
+                })
+                redirect("/")
+            }}>
                 <Button variant={'secondary'}>Log Out</Button>
-            </LogoutLink>
+            </div>
         ) : (
             <div className="flex gap-2">
-                <LoginLink>
+                <Link href="/login">
                     <Button variant={'secondary'}>Log In</Button>
-                </LoginLink>
-                <RegisterLink>
+                </Link>
+                <Link href="/sign-up">
                     <Button>Sign Up</Button>
-                </RegisterLink>
+                </Link>
             </div>
         )}
        </nav> 

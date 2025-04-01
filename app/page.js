@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -10,9 +11,11 @@ export default function Home() {
             Your new ticket manager
           </h1>
           <p className="text-3xl mt-2">Try it now ;)</p>
-          <Button className="mt-12" variant={"secondary"} size={"lg"}>
-            Sign up
-          </Button>
+          <Link href="/sign-up">
+            <Button className="mt-12" variant={"secondary"} size={"lg"}>
+              Sign up
+            </Button>
+          </Link>
         </div>
       </Card>
     </main>

@@ -10,24 +10,17 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog"
 import { useState } from "react"
+import { addTicket, getTickets } from "@/app/actions"
 
-export default function AddTicket ({tickets, setTickets}) {
+export default function AddTicket ({setTickets}) {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
 
-    function addTicket () {
+    async function handleClick () {
         if (title.length > 0 && description.length > 0) {
-            const ticketsCopy = [...tickets]
-            const currentDate = new Date();
-            const hours = String(currentDate.getHours()).padStart(2, '0');
-            const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-            const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-            const formattedDate = currentDate.toISOString().split('T')[0];
-            const date = `${formattedDate}   ${hours}:${minutes}:${seconds}`;
-            const newTicket = {title, description, date}
-            ticketsCopy.push(newTicket)
-            localStorage.setItem('savedTickets', JSON.stringify(ticketsCopy))
-            setTickets(ticketsCopy)
+            addTicket(title, description)
+            const tickets = await getTickets()
+            setTickets(JSON.parse(tickets))
         }
     }
 
@@ -52,7 +45,7 @@ export default function AddTicket ({tickets, setTickets}) {
                 </form>
                 <div className="text-center">
                 <DialogClose className="" asChild>
-                    <Button className="" onClick={()=>addTicket()}>Add</Button>
+                    <Button className="" onClick={()=>handleClick()}>Add</Button>
                 </DialogClose>
                 </div>  
             </DialogContent>
