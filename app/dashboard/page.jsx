@@ -11,7 +11,7 @@ export default async function Dashboard () {
         headers: await headers()
     })
     if (!session) {
-        redirect("/un-auth");
+        redirect("/un-auth")
     }
 
     const user = session?.user
