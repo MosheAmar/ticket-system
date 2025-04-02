@@ -58,7 +58,6 @@ export default function Signup() {
                     alert(ctx.error.message)
                 },
         })
-        console.log(values)
     }
 
 return (
