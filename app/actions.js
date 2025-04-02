@@ -3,6 +3,7 @@
 import { auth } from '@/lib/auth';
 import User from './models'
 import { headers } from 'next/headers';
+import { mp } from '@/lib/mixpanel';
 
 export async function initTickets () {
     const session = await auth.api.getSession({
@@ -33,6 +34,7 @@ export async function addTicket (title, description) {
             date,
         }
         await User.findOneAndUpdate({email: email}, { '$push': { tickets: newTicket }}, {new: true})
+        mp.track("ticket_add", {distinct_id: session.user.id})
     }
 }
 

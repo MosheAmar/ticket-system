@@ -7,8 +7,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 
-export default function Tickets () {
-    const [tickets, setTickets] = useState([])
+export default function Tickets ({ savedTickets }) {
+    const [tickets, setTickets] = useState(savedTickets || [])
     const [isCardDisplay, setIsCardDisplay] = useState(true)
 
     return (
