@@ -21,7 +21,7 @@ export default async function Dashboard () {
         $last_name: user.lastName,
         $created: (new Date('jan 1 2013')).toISOString(),
     });
-    mp.track("Page View", {page: 'dashboard', distinct_id: user.id})
+    mp.track("page-view", {page: 'dashboard', distinct_id: user.id})
 
     const savedTickets = await getTickets()
 

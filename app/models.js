@@ -1,7 +1,8 @@
 
 const mongoose = require('mongoose')
+const {Schema} = mongoose
 
-const ticketSchema = new mongoose.Schema({
+const ticketSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -9,22 +10,17 @@ const ticketSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true
-    },
-    date: {
-        type: String,
-        required: true
     }
+}, {
+    timestamps: true,
 })
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
     email: {
         type: String,
         required: true
     },
-    tickets: {
-        type: Object,
-        default: [],
-    }
+    tickets: [ticketSchema]
 })
 
 const User = mongoose.models.User || mongoose.model('User', userSchema)

@@ -21,20 +21,31 @@ export async function addTicket (title, description) {
             headers: await headers()
     })
     if (session) {
-        const currentDate = new Date();
-        const hours = String(currentDate.getHours()).padStart(2, '0');
-        const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-        const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-        const formattedDate = currentDate.toISOString().split('T')[0];
-        const date = `${formattedDate}   ${hours}:${minutes}:${seconds}`;
         const email = session.user.email
-        const newTicket = {
-            title, 
-            description, 
-            date,
+        const user = await User.findOne({email})
+        try {
+            user.tickets.push({title, description})
+            await user.save()
+            mp.track("ticket_add", {distinct_id: session.user.id})
+        } catch (err) {
+            console.log(err)
         }
-        await User.findOneAndUpdate({email: email}, { '$push': { tickets: newTicket }}, {new: true})
-        mp.track("ticket_add", {distinct_id: session.user.id})
+    }
+}
+export async function deleteTicket (id) {
+    const session = await auth.api.getSession({
+            headers: await headers()
+    })
+    if (session) {
+        const email = session.user.email
+        const user = await User.findOne({email})
+        try {
+            user.tickets.pull({_id: id})
+            await user.save()
+            mp.track("ticket_delete", {distinct_id: session.user.id})
+        } catch (err) {
+            console.log(err)
+        }
     }
 }
 

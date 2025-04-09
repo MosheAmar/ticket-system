@@ -1,6 +1,14 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
 import { 
     Dialog, 
     DialogClose, 
@@ -9,19 +17,45 @@ import {
     DialogTitle, 
     DialogTrigger,
   } from "@/components/ui/dialog"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { addTicket, getTickets } from "@/app/actions"
+import { Input } from "@/components/ui/input"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Textarea } from "@/components/ui/textarea"
 
 export default function AddTicket ({setTickets}) {
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
+    const dialog = useRef()
 
-    async function handleClick () {
-        if (title.length > 0 && description.length > 0) {
-            addTicket(title, description)
-            const tickets = await getTickets()
-            setTickets(JSON.parse(tickets))
-        }
+    const formSchema = z.object({
+        title: z.string().min(1, {
+            message: "Title must have at least 2 characters.",
+        })
+        .max(15, {
+            message: "Title must have up to 15 characters.",
+        }),
+        description: z.string().min(2, {
+            message: "Description must have at least 2 characters.",
+        })
+        .max(100, {
+            message: "Description must have up to 100 characters.",
+        }),
+    })
+
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            title: "",
+            description: "",
+            },
+    })
+
+    async function onSubmit (values) {
+        const { title, description } = values
+        addTicket(title, description)
+        const tickets = await getTickets()
+        setTickets(JSON.parse(tickets))
     }
 
     return (
@@ -29,25 +63,46 @@ export default function AddTicket ({setTickets}) {
             <DialogTrigger asChild>
                 <Button>Create Ticket</Button>
             </DialogTrigger>
-            <DialogContent className="bg-gray-100 flex flex-col rounded fixed inset-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 w-[200px] h-fit">
+            <DialogContent ref={dialog} className="bg-neutral-50 flex flex-col rounded-xl fixed inset-1/2 transform -translate-x-1/2 -translate-y-1/2 py-8 px-6 w-[350px] h-fit">
                 <DialogHeader className="items-center font-bold">
-                    <DialogTitle>Add Ticket</DialogTitle>
+                    <DialogTitle className="font-bold text-2xl">Add Ticket</DialogTitle>
                 </DialogHeader>
-                <form className="flex flex-col gap-2 m-2">
-                    <div className="flex flex-col gap-1">
-                    <label htmlFor="" className="text-xs">Title</label>
-                    <input value={title} required className="text-xs outline-2 rounded p-1" type="text" placeholder="Ticket title" onChange={(e)=>{setTitle(e.target.value)}}/>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                    <label htmlFor="" className="text-xs">Description</label>
-                    <textarea value={description} required className="text-xs outline-2 rounded p-1" placeholder="Ticket description" onChange={(e)=>{setDescription(e.target.value)}}></textarea>
-                    </div>
-                </form>
-                <div className="text-center">
-                <DialogClose className="" asChild>
-                    <Button className="" onClick={()=>handleClick()}>Add</Button>
-                </DialogClose>
-                </div>  
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                            <FormField
+                            control={form.control}
+                            name="title"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Title</FormLabel>
+                                <FormControl>
+                                    <Input {...field} />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                            <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Description</FormLabel>
+                                <FormControl>
+                                    <Textarea {...field} />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                            <div className="flex justify-between">
+                                <DialogClose asChild>
+                                    <Button variant="destructive" className="w-30">Close</Button>
+                                </DialogClose>
+                                <Button data-slot="dialog-close" data-state="open" type="submit" className="w-30">Create</Button>
+                            </div>
+                        </form>
+                    </Form>
             </DialogContent>
         </Dialog>
     )

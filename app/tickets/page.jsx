@@ -5,6 +5,7 @@ import TableView from "../tickets/table/page";
 import AddTicket from "../tickets/add-ticket/page";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 
 export default function Tickets ({ savedTickets }) {
@@ -13,12 +14,20 @@ export default function Tickets ({ savedTickets }) {
 
     return (
         <>
-            <div className="flex justify-center gap-5 mt-1">
-                <h1 className="leading-8">Choose ticket layout:</h1>
-                <Button variant={'outline'} onClick={()=>setIsCardDisplay(!isCardDisplay)}>{isCardDisplay ? 'Table Display' : 'Cards Display'}</Button>
+            <div className="flex justify-center gap-5 mt-2">
+                <h1 className="leading-8">Choose tickets layout:</h1>
+                <div className="flex justify-between w-[120]">
+                    <Button variant={isCardDisplay ? 'outline' : 'secondary'} onClick={()=>setIsCardDisplay(!isCardDisplay)}>
+                        <i className="bi bi-grid-3x3-gap-fill"></i>
+                    </Button>
+                    <Separator orientation="vertical" />
+                    <Button variant={isCardDisplay ? 'secondary' : 'outline'} onClick={()=>setIsCardDisplay(!isCardDisplay)}>
+                        <i className="bi bi-card-list"></i>
+                    </Button>
+                </div>
             </div>
             <div>
-                {isCardDisplay ? <Cards tickets={tickets}/> : <TableView tickets={tickets}/>}
+                {isCardDisplay ? <Cards tickets={tickets} setTickets={setTickets}/> : <TableView tickets={tickets} setTickets={setTickets}/>}
             </div>
             <AddTicket setTickets={setTickets}/>
         </>
