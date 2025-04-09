@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -21,11 +20,11 @@ import {
     CardTitle,
   } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { authClient } from "@/lib/auth-client"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { formSchema } from "@/lib/auth-schema"
 import { initTickets } from "@/app/actions"
+import { auth } from "@/lib/auth"
 
 export default function Signup() {
     const form = useForm({
@@ -40,7 +39,7 @@ export default function Signup() {
 
     async function onSubmit(values) {
         const { firstName, lastName, email, password } = values
-        const { data, error } = await authClient.signUp.email({
+        const { data, error } = await auth.api.signUpEmail({
             firstName,
             lastName,
             email,
