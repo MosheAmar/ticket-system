@@ -1,15 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export default function Home() {
-  const session = authClient.getSession()
-  console.log(session)
-  if (session) {
-    redirect("/dashboard")
-  }
+
   return (
     <main className="sm:px-24 px-4">
       <Card className="rounded-2xl bg-slate-950 shadow-2xl text-white text-center my-8">
