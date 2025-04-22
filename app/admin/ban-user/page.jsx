@@ -47,7 +47,7 @@ export default function BanUser() {
             userId,
             banReason,
         })
-        redirect("/admin")
+        redirect("/admin/users")
     }
 
     return (

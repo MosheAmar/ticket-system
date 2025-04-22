@@ -42,7 +42,7 @@ export default function CreateUser() {
             userId,
         })
         removeUser(userId)
-        redirect("/admin")
+        redirect("/admin/users")
     }
 
     return (

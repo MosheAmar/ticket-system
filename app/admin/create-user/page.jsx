@@ -60,7 +60,7 @@ export default function CreateUser() {
             },
         });
         initTicketsManually(email)
-        redirect("/admin")
+        redirect("/admin/users")
     }
 
 return (
