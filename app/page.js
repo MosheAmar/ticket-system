@@ -1,8 +1,13 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 
 export default function Home() {
+  const { isPending, data } = useSession()
+  if (!isPending && data?.user) {window.location.href = "/dashboard"}
 
   return (
     <main className="sm:px-24 px-4">

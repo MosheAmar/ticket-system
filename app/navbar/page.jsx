@@ -1,44 +1,20 @@
-import { Button } from "@/components/ui/button";
+
+import NavbarClient from "@/components/navbar-client";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export default async function Navbar () {
     const session = await auth.api.getSession({
         headers: await headers()
     })
+    const isSession = session?.user ? true : false
+    const isAdmin = session?.user?.role === "admin" ? true : false
+    async function logOut () {
+        'use server'
+        await auth.api.signOut({
+            headers: await headers()
+        })
+    }
 
-    return (
-       <nav className="flex justify-between items-center py-2 px-4">
-        <h1 className="font-bold text-2xl">Ticket System</h1>
-        {(session?.user?.role === "admin") ? (
-           <Link href="/admin">
-                <Button variant={'secondary'}>User Management</Button>
-            </Link> 
-        ) : (
-            <></>
-        )}
-        {session ? (
-            <div onClick={async ()=>{
-                'use server'
-                await auth.api.signOut({
-                    headers: await headers()
-                })
-                redirect("/")
-            }}>
-                <Button variant={'secondary'}>Log Out</Button>
-            </div>
-        ) : (
-            <div className="flex gap-2">
-                <Link href="/login">
-                    <Button variant={'secondary'}>Log In</Button>
-                </Link>
-                <Link href="/sign-up">
-                    <Button>Sign Up</Button>
-                </Link>
-            </div>
-        )}
-       </nav> 
-    )
+    return <NavbarClient isAdmin={isAdmin} isSession={isSession} logOut={logOut} />
 }

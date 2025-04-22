@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -22,11 +21,12 @@ import {
   } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
-import { redirect } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import Link from "next/link"
 import { loginFormSchema } from "@/lib/auth-schema"
 
 export default function Login() {
+    const router = useRouter()  
     const form = useForm({
         resolver: zodResolver(loginFormSchema),
         defaultValues: {
@@ -44,14 +44,13 @@ export default function Login() {
                     //show loading
                 },
                 onSuccess: (ctx) => {
-                    redirect('/dashboard')
+                    window.location.href = '/dashboard'
                 },
                 onError: (ctx) => {
                     // display the error message
                     alert(ctx.error.message)
                 },
         })
-        
     }
 
 return (
