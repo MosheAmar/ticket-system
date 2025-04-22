@@ -1,6 +1,6 @@
 'use server'
 
-import { auth } from '@/lib/auth';
+import { auth, db } from '@/lib/auth';
 import User from './models'
 import { headers } from 'next/headers';
 import { mp } from '@/lib/mixpanel';
@@ -14,6 +14,22 @@ export async function initTickets () {
         email,
       });
     newUser.save()
+}
+
+export async function initTicketsManually (email) {
+    const newUser = new User({
+        email,
+      });
+    newUser.save()
+}
+
+const { ObjectId } = require("mongodb")
+
+export async function removeUser (id) {
+    const user = await db.collection('user').findOne({_id: new ObjectId(id)})
+    const email = user.email
+    await User.deleteOne({email})
+    return
 }
 
 export async function addTicket (title, description) {

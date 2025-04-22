@@ -12,6 +12,13 @@ export default async function Navbar () {
     return (
        <nav className="flex justify-between items-center py-2 px-4">
         <h1 className="font-bold text-2xl">Ticket System</h1>
+        {(session?.user?.role === "admin") ? (
+           <Link href="/admin">
+                <Button variant={'secondary'}>User Management</Button>
+            </Link> 
+        ) : (
+            <></>
+        )}
         {session ? (
             <div onClick={async ()=>{
                 'use server'
