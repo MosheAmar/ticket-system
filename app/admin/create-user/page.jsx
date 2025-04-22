@@ -47,7 +47,7 @@ export default function CreateUser() {
     async function onSubmit(values) {
         const { firstName, lastName, email, password, role } = values
         await authClient.admin.createUser({
-            name: "Test User",
+            name: "",
             email,
             password,
             role,
