@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form"
 import { z } from "zod";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 export default function ResetPassword() {
     const searchParams = useSearchParams();
@@ -41,6 +42,7 @@ export default function ResetPassword() {
   }
     
   return (
+      <Suspense fallback={<div>Loading...</div>}>
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center mb-6">Reset Password</h2>
         <p className="text-sm text-gray-600 mb-4">
@@ -67,5 +69,6 @@ export default function ResetPassword() {
                 </form>
             </Form>
       </div>
+      </Suspense>
   );
 }
