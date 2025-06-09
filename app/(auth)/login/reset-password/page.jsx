@@ -17,8 +17,8 @@ import { useSearchParams } from "next/navigation";
 import { resetPassword } from "@/lib/auth-client";
 
 export default function ResetPassword() {
-    const searchParams = useSearchParams();
-    const token = searchParams.get("token");
+    const searchParams = useSearchParams()
+    const token = searchParams.get("token")
 
   const formSchema = z.object({
     password: z.string().min(8, {
