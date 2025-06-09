@@ -13,54 +13,49 @@ import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form"
 import { z } from "zod";
-import { forgetPassword } from "@/lib/auth-client";
-import { findUser } from "@/app/actions";
+import { useSearchParams } from "next/navigation";
+import { resetPassword } from "@/lib/auth-client";
 
-
-export default function ForgotPassword() {
+export default function ResetPassword() {
+    const searchParams = useSearchParams()
+    const token = searchParams.get("token")
 
   const formSchema = z.object({
-    email: z.string().email({
-        message: "Please enter a valid email."
+    password: z.string().min(8, {
+        message: "Password must be at least 8 characters.",
+    })
+    .max(50, {
+        message: "Password must be up to 50 characters.",
     }),
   })
   const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: "",
+            password: "",
             },
   })
 
   async function onSubmit(values) {
-
-    const data = await findUser(values.email);
-    const user = JSON.parse(data);
-
-    if (user) {
-
-        const { error } = await forgetPassword({
-            email: values.email,
-            redirectTo: `${window.location.origin}/login/reset-password`,
-        });
-    } else {
-        alert("User not found. Please check your email address.");
-    }
+    const { error } = await resetPassword({
+        token,
+        newPassword: values.password,
+      });
   }
     
   return (
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Forgot Password</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Reset Password</h2>
         <p className="text-sm text-gray-600 mb-4">
-          Enter your email address to receive a password reset link.
+          Enter your new password.
         </p>
         <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField
                     control={form.control}
-                    name="email"
+                    name="password"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>New Password</FormLabel>
                         <FormControl>
                             <Input {...field} />
                         </FormControl>
