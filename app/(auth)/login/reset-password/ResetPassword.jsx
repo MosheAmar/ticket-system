@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form"
 import { z } from "zod";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { resetPassword } from "@/lib/auth-client";
 
 export default function ResetPassword() {
@@ -40,6 +40,9 @@ export default function ResetPassword() {
         token,
         newPassword: values.password,
       });
+      setTimeout(() => {
+        redirect("./")
+      }, 2000);
   }
     
   return (
